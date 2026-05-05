@@ -1,0 +1,197 @@
+.page {
+  min-height: 100vh;
+  background: #f7f7f7;
+  padding-bottom: 80px;
+}
+
+.filterBar {
+  background: #fff;
+  padding: 10px 12px 8px;
+  border-bottom: 0.5px solid #eee;
+  position: sticky;
+  top: 52px;
+  z-index: 9;
+}
+
+.chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+
+.chip {
+  font-size: 13px;
+  padding: 6px 13px;
+  border-radius: 20px;
+  border: 0.5px solid #ddd;
+  color: #666;
+  white-space: nowrap;
+  background: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.chipOn {
+  background: #1c2b4a;
+  color: #fff;
+  border-color: #1c2b4a;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
+.checkRow input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #1c2b4a;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sortLabel {
+  font-size: 11px;
+  color: #aaa;
+  padding: 8px 14px 4px;
+}
+
+.list {
+  padding: 4px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  border: 0.5px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+}
+.card:active { background: #f8f8f8; }
+
+.thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background: #e8e8e8;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.thumb svg { width: 22px; height: 22px; }
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.floorBadge {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  background: rgba(28, 43, 74, 0.85);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.doneBadge {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background: #22a06b;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.place {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.sub {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  color: #bbb;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.fabWrap {
+  position: fixed;
+  bottom: 24px;
+  right: 16px;
+  z-index: 20;
+}
+
+.fab {
+  background: #1c2b4a;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(28, 43, 74, 0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+.fab svg {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2.5;
+}
+.fab:active { opacity: 0.85; }

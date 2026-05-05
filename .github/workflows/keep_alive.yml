@@ -1,0 +1,14 @@
+name: Keep Supabase Alive
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch: # これを追加すると手動実行ボタンが出る
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase API
+        run: |
+          curl -s -o /dev/null -I -X GET "${{ secrets.SUPABASE_PING_URL }}" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"

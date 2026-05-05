@@ -1,0 +1,62 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  background: #f7f7f7;
+  color: #111;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ナビゲーション共通 */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-bottom: 0.5px solid #e8e8e8;
+}
+
+.nav-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111;
+}
+
+.nav-icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #555;
+}
+
+.nav-icon-btn:active { background: #f0f0f0; }
+.nav-icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* ページコンテナ */
+.page { min-height: 100vh; background: #f7f7f7; }
+.page-white { min-height: 100vh; background: #fff; }
