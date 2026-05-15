@@ -58,6 +58,27 @@
   flex-shrink: 0;
 }
 
+.filterRow2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.sortSelect {
+  font-size: 13px;
+  color: #444;
+  border: 0.5px solid #ddd;
+  border-radius: 8px;
+  padding: 4px 24px 4px 8px;
+  background: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  cursor: pointer;
+}
+
 .sortLabel {
   font-size: 11px;
   color: #aaa;

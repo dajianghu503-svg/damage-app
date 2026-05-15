@@ -51,7 +51,7 @@ export default function LoginPage() {
             <input
               className={styles.input}
               type="password"
-              placeholder="••••••••"
+              placeholder="パスワード"
               value={password}
               onChange={e => setPassword(e.target.value)}
               autoComplete="current-password"

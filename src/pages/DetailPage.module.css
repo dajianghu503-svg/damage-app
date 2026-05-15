@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: pan-y;
+  touch-action: none;
 }
 
 .lbImg {
@@ -16,6 +16,9 @@
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
+  transform-origin: center center;
+  transition: none;
+  touch-action: none;
 }
 
 .lbClose {
@@ -261,3 +264,65 @@
   -webkit-tap-highlight-color: transparent;
 }
 .editBtn:active { background: #f0f3f8; }
+
+/* 削除確認ダイアログ */
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.dialog {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.dialogTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111;
+  margin-bottom: 8px;
+}
+
+.dialogDesc {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.dialogBtns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dialogCancel {
+  padding: 12px;
+  border: 0.5px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+
+.dialogDelete {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #d0021b;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+}
+.dialogDelete:active { opacity: 0.85; }

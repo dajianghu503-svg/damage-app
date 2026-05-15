@@ -1,5 +1,5 @@
 -- =====================================================
--- Supabase セットアップSQL
+-- Supabase セットアップSQL（認証あり・初回用）
 -- Supabase Dashboard > SQL Editor に貼り付けて実行
 -- =====================================================
 
@@ -10,6 +10,7 @@ create table if not exists damages (
   location    text not null,
   remarks     text default '',
   is_done     boolean not null default false,
+  is_deleted  boolean not null default false,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
@@ -25,27 +26,31 @@ create table if not exists damage_images (
 -- 3. インデックス
 create index if not exists damage_images_damage_id_idx on damage_images(damage_id);
 
--- 4. RLS（Row Level Security）を有効化
+-- 4. RLS 有効化
 alter table damages enable row level security;
 alter table damage_images enable row level security;
 
--- 5. ポリシー設定（認証なしで全員読み書き可 ← 社内限定なら認証追加を推奨）
-create policy "allow all damages" on damages for all using (true) with check (true);
-create policy "allow all damage_images" on damage_images for all using (true) with check (true);
+-- 5. ポリシー（認証済みユーザーのみ）
+create policy "auth users only damages"
+  on damages for all
+  to authenticated
+  using (true)
+  with check (true);
 
--- =====================================================
--- Storage バケット設定
--- Supabase Dashboard > Storage > New Bucket
--- =====================================================
--- バケット名: damage-images
--- Public: ON（公開URL で画像表示するため）
--- ※ Dashboard から手動作成してください
+create policy "auth users only damage_images"
+  on damage_images for all
+  to authenticated
+  using (true)
+  with check (true);
 
--- Storage ポリシー（SQL Editor で実行）
+-- 6. Storage バケット作成
 insert into storage.buckets (id, name, public)
 values ('damage-images', 'damage-images', true)
 on conflict (id) do nothing;
 
-create policy "allow all storage" on storage.objects
-  for all using (bucket_id = 'damage-images')
+-- 7. Storage ポリシー（認証済みユーザーのみ）
+create policy "auth users only storage"
+  on storage.objects for all
+  to authenticated
+  using (bucket_id = 'damage-images')
   with check (bucket_id = 'damage-images');

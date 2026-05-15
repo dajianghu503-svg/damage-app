@@ -4,6 +4,15 @@ import { supabase, floorSortIndex } from '../lib/supabase'
 import styles from './ListPage.module.css'
 
 const FLOOR_FILTERS = ['すべて', 'RF・39F〜20F', '19F〜01F・B1F']
+const SORT_OPTIONS = [
+  { value: 'floor',   label: '階数順' },
+  { value: 'created', label: '登録順' },
+  { value: 'updated', label: '更新順' },
+]
+
+const SS_FLOOR = 'list_floorFilter'
+const SS_DONE  = 'list_showDone'
+const SS_SORT  = 'list_sort'
 
 function matchFloorFilter(floor, filter) {
   if (filter === 'すべて') return true
@@ -20,24 +29,37 @@ function matchFloorFilter(floor, filter) {
   return true
 }
 
+function sortItems(items, sort) {
+  if (sort === 'floor')   return [...items].sort((a, b) => floorSortIndex(a.floor) - floorSortIndex(b.floor))
+  if (sort === 'created') return [...items].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  if (sort === 'updated') return [...items].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+  return items
+}
+
 export default function ListPage() {
   const navigate = useNavigate()
-  const [items, setItems] = useState([])
+  const [items, setItems]     = useState([])
   const [loading, setLoading] = useState(true)
-  const [floorFilter, setFloorFilter] = useState('すべて')
-  const [showDone, setShowDone] = useState(false)
   const [thumbMap, setThumbMap] = useState({})
+
+  const [floorFilter, setFloorFilter] = useState(() => sessionStorage.getItem(SS_FLOOR) || 'すべて')
+  const [showDone,    setShowDone]    = useState(() => sessionStorage.getItem(SS_DONE) === 'true')
+  const [sort,        setSort]        = useState(() => sessionStorage.getItem(SS_SORT)  || 'floor')
+
+  function changeFloorFilter(v) { setFloorFilter(v); sessionStorage.setItem(SS_FLOOR, v) }
+  function changeShowDone(v)    { setShowDone(v);    sessionStorage.setItem(SS_DONE, String(v)) }
+  function changeSort(v)        { setSort(v);        sessionStorage.setItem(SS_SORT, v) }
 
   const fetchItems = useCallback(async () => {
     setLoading(true)
     const { data, error } = await supabase
       .from('damages')
-      .select('id, floor, location, remarks, is_done, updated_at')
+      .select('id, floor, location, remarks, is_done, created_at, updated_at')
+      .eq('is_deleted', false)
       .order('updated_at', { ascending: false })
 
     if (error) { console.error(error); setLoading(false); return }
 
-    // 画像の取得（各レコードの最初の1枚）
     const ids = (data || []).map(d => d.id)
     if (ids.length > 0) {
       const { data: imgs } = await supabase
@@ -64,20 +86,17 @@ export default function ListPage() {
 
   useEffect(() => { fetchItems() }, [fetchItems])
 
-  const filtered = items
-    .filter(item => matchFloorFilter(item.floor, floorFilter))
-    .filter(item => showDone || !item.is_done)
-    .sort((a, b) => floorSortIndex(a.floor) - floorSortIndex(b.floor))
+  const filtered = sortItems(
+    items
+      .filter(item => matchFloorFilter(item.floor, floorFilter))
+      .filter(item => showDone || !item.is_done),
+    sort
+  )
 
-  function formatDate(str) {
-    if (!str) return ''
-    const d = new Date(str)
-    return `${d.getMonth() + 1}/${d.getDate()} 更新`
-  }
+  const sortLabel = sort === 'floor' ? '階数順（高→低）' : sort === 'created' ? '登録順（新しい順）' : '更新順（新しい順）'
 
   return (
     <div className={styles.page}>
-      {/* ナビゲーション */}
       <div className="nav-bar">
         <span className="nav-title">傷情報一覧</span>
         <button className="nav-icon-btn" onClick={fetchItems} title="更新">
@@ -92,33 +111,29 @@ export default function ListPage() {
         </button>
       </div>
 
-      {/* フィルターバー */}
       <div className={styles.filterBar}>
         <div className={styles.chips}>
           {FLOOR_FILTERS.map(f => (
             <button
               key={f}
               className={`${styles.chip} ${floorFilter === f ? styles.chipOn : ''}`}
-              onClick={() => setFloorFilter(f)}
-            >
-              {f}
-            </button>
+              onClick={() => changeFloorFilter(f)}
+            >{f}</button>
           ))}
         </div>
-        <label className={styles.checkRow}>
-          <input
-            type="checkbox"
-            checked={showDone}
-            onChange={e => setShowDone(e.target.checked)}
-          />
-          対応済を含む
-        </label>
+        <div className={styles.filterRow2}>
+          <label className={styles.checkRow}>
+            <input type="checkbox" checked={showDone} onChange={e => changeShowDone(e.target.checked)} />
+            対応済を含む
+          </label>
+          <select className={styles.sortSelect} value={sort} onChange={e => changeSort(e.target.value)}>
+            {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
       </div>
 
-      {/* ソートラベル */}
-      <div className={styles.sortLabel}>階数順（高→低）</div>
+      <div className={styles.sortLabel}>{sortLabel}</div>
 
-      {/* リスト */}
       {loading ? (
         <div className={styles.empty}>読み込み中…</div>
       ) : filtered.length === 0 ? (
@@ -126,11 +141,7 @@ export default function ListPage() {
       ) : (
         <div className={styles.list}>
           {filtered.map(item => (
-            <div
-              key={item.id}
-              className={styles.card}
-              onClick={() => navigate(`/detail/${item.id}`)}
-            >
+            <div key={item.id} className={styles.card} onClick={() => navigate(`/detail/${item.id}`)}>
               <div className={styles.thumb}>
                 {thumbMap[item.id] ? (
                   <img src={thumbMap[item.id]} alt="" className={styles.thumbImg} />
@@ -153,7 +164,6 @@ export default function ListPage() {
         </div>
       )}
 
-      {/* 新規登録ボタン */}
       <div className={styles.fabWrap}>
         <button className={styles.fab} onClick={() => navigate('/register')}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
