@@ -181,7 +181,6 @@ export default function DetailPage() {
         <div className={styles.dialogOverlay} onClick={() => setConfirmDelete(false)}>
           <div className={styles.dialog} onClick={e => e.stopPropagation()}>
             <div className={styles.dialogTitle}>この記録を削除しますか？</div>
-            <div className={styles.dialogDesc}>削除後も管理画面から復元できます。</div>
             <div className={styles.dialogBtns}>
               <button className={styles.dialogCancel} onClick={() => setConfirmDelete(false)}>キャンセル</button>
               <button className={styles.dialogDelete} onClick={handleDelete}>削除する</button>
