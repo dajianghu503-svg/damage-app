@@ -13,7 +13,7 @@ jobs:
         run: |
           # POSTgREST API経由でテーブルから1件だけ取得する（DBを実際に起こす）
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/dummy?select=id&limit=1" \
+            "${{ secrets.SUPABASE_PING_URL }}/rest/v1/dummy?select=id&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
           
