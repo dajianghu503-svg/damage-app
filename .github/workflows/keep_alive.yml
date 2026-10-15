@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 on:
   schedule:
     # 毎日2〜3回実行するように増やすのがおすすめ（GitHub Actionsの遅延対策）
-    - cron: '0 0,8,16 * * *'
+    - cron: '4,16 * * *'
   workflow_dispatch:
 
 jobs:
